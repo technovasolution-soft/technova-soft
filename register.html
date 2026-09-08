@@ -1,1 +1,34 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registration</title><link rel="stylesheet" href="style.css"></head><body><nav><a class="brand" href="index.html">TechNova Solutions</a><div class="navlinks"><a href="index.html">Home</a><a href="about.html">Company</a><a href="index.html#services">Services</a><a href="index.html#innovation">Innovation</a><a href="test.html">Online Test</a></div></nav><main class="container"><div class="formbox"><h1>Certificate Registration</h1><p>Complete your details after attending the test.</p><form id="reg"><label>Full Name<input id="name" required></label><label>Email Address<input id="email" type="email" required></label><label>College / Institution<input id="college" required></label><label>Department<input id="dept" required></label><button type="submit">Complete Registration</button></form><p id="status"></p></div></main><div class="footer">© 2026 TechNova Solutions · Innovation & Digital Technology Study Website</div><script>document.getElementById('reg').addEventListener('submit',function(e){e.preventDefault();const name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),college=document.getElementById('college').value.trim(),dept=document.getElementById('dept').value.trim(),score=localStorage.getItem('testScore')||'0',total=localStorage.getItem('testTotal')||'15';localStorage.setItem('regName',name);localStorage.setItem('regEmail',email);localStorage.setItem('regCollege',college);localStorage.setItem('regDept',dept);localStorage.setItem('regScore',score+'/'+total);/* Email sending can be connected here with your email service/backend. */location.href='certificate.html'});</script></body></html>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registration</title><link rel="stylesheet" href="style.css"></head><body><nav><a class="brand" href="index.html">TechNova Solutions</a><div class="navlinks"><a href="index.html">Home</a><a href="about.html">Company</a><a href="index.html#services">Services</a><a href="index.html#innovation">Innovation</a><a href="test.html">Online Test</a></div></nav><main class="container"><div class="formbox"><h1>Certificate Registration</h1><p>Complete your details after attending the test.</p><form id="reg">
+<label>Full Name<input id="name" name="Full Name" autocomplete="name" required></label>
+<label>Email Address<input id="email" name="Participant Email" type="email" autocomplete="email" required></label>
+<label>College / Institution<input id="college" name="College / Institution" required></label>
+<label>Department<input id="dept" name="Department" required></label>
+<button type="submit">Complete Registration</button></form><p id="status"></p></div></main><div class="footer">© 2026 TechNova Solutions · Innovation & Digital Technology Study Website</div><script>
+document.getElementById('reg').addEventListener('submit', async function(e){
+ e.preventDefault();
+ const name=document.getElementById('name').value.trim();
+ const email=document.getElementById('email').value.trim();
+ const college=document.getElementById('college').value.trim();
+ const dept=document.getElementById('dept').value.trim();
+ const score=(localStorage.getItem('testScore')||'0')+'/'+(localStorage.getItem('testTotal')||'15');
+ const answers=localStorage.getItem('testAnswers')||'Not available';
+ localStorage.setItem('regName',name);localStorage.setItem('regEmail',email);localStorage.setItem('regCollege',college);localStorage.setItem('regDept',dept);localStorage.setItem('regScore',score);
+ const status=document.getElementById('status');
+ status.textContent='Submitting registration...';
+ try{
+   const response=await fetch('https://formsubmit.co/ajax/technovasolutionsoft@gmail.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({
+     '_subject':'TechNova Solutions - New Certificate Registration',
+     'Full Name':name,
+     'Participant Email':email,
+     'College / Institution':college,
+     'Department':dept,
+     'Test Score':score,
+     'Test Answers':answers
+   })});
+   if(!response.ok) throw new Error('Submission failed');
+   window.location.href='certificate.html';
+ }catch(err){
+   status.textContent='Registration could not be sent. Please try again.';
+ }
+});
+</script></body></html>
